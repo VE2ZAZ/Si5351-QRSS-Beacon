@@ -1,0 +1,732 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>VE2ZAZ - Si5351 QRSS Transmitter (Beacon) Configuration
+      Software</title>
+    <meta name="generator" content="LibreOffice 6.0.7.3 (Linux)">
+    <meta name="created" content="00:00:00">
+    <meta name="changed" content="2019-11-07T20:07:18.401989250">
+    <style type="text/css">
+		@page { margin: 0.79in }
+		p { margin-bottom: 0.1in; line-height: 115% }
+		h2.western { font-family: "Liberation Sans", sans-serif; font-size: 16pt }
+		h2.cjk { font-family: "Noto Sans CJK SC Regular"; font-size: 16pt }
+		h2.ctl { font-family: "Lohit Devanagari"; font-size: 16pt }
+		h4.western { font-family: "Liberation Sans", sans-serif; font-size: 13pt; font-style: italic }
+		h4.cjk { font-family: "Noto Sans CJK SC Regular"; font-size: 13pt; font-style: italic }
+		h4.ctl { font-family: "Lohit Devanagari"; font-size: 13pt; font-style: italic }
+		a:link { so-language: zxx }
+	</style>
+  </head>
+  <body dir="ltr" vlink="#551A8B" text="#000000" bgcolor="#eeeeee"
+    alink="#EE0000" link="#0000EE" lang="en-US">
+    <font face="Helvetica, Arial, sans-serif"> </font>
+    <h1 style="margin-top: 0.17in; margin-bottom: 0.08in; line-height:
+      100%; page-break-after: avoid" align="center"><font
+        face="Helvetica, Arial, sans-serif" color="#0066b3"><font
+          style="font-size: 22pt" size="6"><b>Si5351 QRSS Transmitter
+            (Beacon) Configuration Software</b></font></font></h1>
+    <font face="Helvetica, Arial, sans-serif"> </font>
+    <h1 align="center"><font style="font-size: 14pt" size="4"
+        face="Helvetica, Arial, sans-serif">Version 0.1, November 2019</font></h1>
+    <font face="Helvetica, Arial, sans-serif"> </font>
+    <p style="margin-top: 0.04in; margin-bottom: 0.08in; line-height:
+      100%; page-break-after: avoid" align="center"><font
+        style="font-size: 14pt" size="4" face="Helvetica, Arial,
+        sans-serif"> by Bert, VE2ZAZ (ve2zaz<font face="Helvetica,
+          Arial, sans-serif"> at</font> <font face="Helvetica, Arial,
+          sans-serif">rac<font face="Helvetica, Arial, sans-serif">.</font>ca</font>
+        <script type="text/javascript">var a = new Array('a','.c','h','zaz','ve2','@ya','oo');document.write("<a href='mailto:"+a[4]+a[3]+a[5]+a[2]+a[6]+a[1]+a[0]+"'>"+a[4]+a[3]+a[5]+a[2]+a[6]+a[1]+a[0]+"</a>");</script>
+        )</font></p>
+    <p> </p>
+    <h2 class="western"><font face="Helvetica, Arial, sans-serif">Description</font></h2>
+    <p><font face="Helvetica, Arial, sans-serif">This software allows to
+        configure Silicon Laboratories Si5351A/C Synthesizer chips for
+        QRSS beacon transmission, when supervised by an Arduino Uno or
+        Nano board. After the Arduino has received a configuration from
+        the software, it will re-load the Si5351 chip with that same
+        configuration at every power up or reset. The Arduino (properly
+        configured by this software) is required, as the Si5351 chip
+        does not retain its configuration when power is removed; it must
+        be re-configured at power up.<br>
+      </font><a href="Images/Linux_Software_Window.png"><font
+          face="Helvetica, Arial, sans-serif"><img alt=""
+            src="Images/Linux_Software_Window.png" vspace="10"
+            align="right" hspace="10" width="400" border="1"
+            height="407"></font></a><br>
+      <font face="Helvetica, Arial, sans-serif">This software was
+        written in FreePascal programming language within the Lazarus
+        IDE. Being a cross-platform compiler, the executable can be made
+        to run in any Linux, Windows or Mac OS environment when compiled
+        in that environment. See the "Prerequisites and Installation"
+        section below for more details specific to the operating system
+        you are running.</font></p>
+    <p><font face="Helvetica, Arial, sans-serif">This software was
+        developed on a VE2ZAZ synthesizer board (below, left) hosting an
+        Arduino-nano and an Si5351C Clock Synthesizer chip. The board
+        can alternately be equipped with the Chinese-made Si5351A board
+        (below, right). The main difference between the A and C versions
+        of the Si5351 is that the C version can lock to an external
+        frequency reference between 10 and 40 Mhz (usable down to 5
+        MHz). All produced output frequencies are then PLL-locked to
+        that reference. The A version relies solely on the accompanying
+        on-board 25 or 27 MHz crystal for its reference. Another
+        advantage of the VE2ZAZ board is that it includes an external
+        reference scaling/shaping circuit, which provides the proper
+        amplitude to the Si5351C, regardless of the shape or amplitude
+        of the input signal.</font></p>
+    <p><font face="Helvetica, Arial, sans-serif"><font face="Helvetica,
+          Arial, sans-serif">Note that this software is not designed to
+          run exclusively on the VE2ZAZ Synthesizer board. As a minimum,
+          one can build this beacon on a solderless prototype board
+          using an Arduino Nano, an off-the-shelf</font><font
+          face="Helvetica, Arial, sans-serif"><font face="Helvetica,
+            Arial, sans-serif"> Si5351A board, and the I2C line
+            conversion circuit, also available </font></font><font
+          face="Helvetica, Arial, sans-serif"><font face="Helvetica,
+            Arial, sans-serif"><font face="Helvetica, Arial, sans-serif">off-the-shelf</font>.
+            External +5V and +3.3V supplies are required.&nbsp;See the </font></font><font
+          face="Helvetica, Arial, sans-serif"><font face="Helvetica,
+            Arial, sans-serif"><font face="Helvetica, Arial, sans-serif">VE2ZAZ's
+
+
+              Si5351A/C Synthesizer board Circuit Schematic (above).<br>
+            </font></font></font></font></p>
+    <p><font face="Helvetica, Arial, sans-serif">The software offers
+        three QRSS transmit modes: </font></p>
+    <p> </p>
+    <p> </p>
+    <p> </p>
+    <p> </p>
+    <p> </p>
+    <ol>
+      <li>
+        <p> </p>
+        <p><font face="Helvetica, Arial, sans-serif"><b>ASK-CW</b>,
+            which is more or less regular CW, but stretched in time.<br>
+          </font> </p>
+        <p> </p>
+      </li>
+    </ol>
+    <p> </p>
+    <p> </p>
+    <p> </p>
+    <ol>
+      <li>
+        <p> </p>
+        <p><font face="Helvetica, Arial, sans-serif"><b>FSK-CW</b>,
+            which is an always-on mode using frequency shifting to
+            differentate between dits/dahs and silences. <br>
+          </font> </p>
+        <p> </p>
+      </li>
+    </ol>
+    <p> </p>
+    <p> </p>
+    <p> </p>
+    <ol>
+      <li>
+        <p> </p>
+        <p><font face="Helvetica, Arial, sans-serif"><b>MFSK-Text</b>,
+            which uses multiple tone frequencies to encode a text
+            message's pixels.&nbsp;</font></p>
+        <p> </p>
+      </li>
+    </ol>
+    <p> </p>
+    <p> </p>
+    <p> </p>
+    <p> <font face="Helvetica, Arial, sans-serif">Among available
+        settings, the Morse code 'dit' duration, the FSK frequency shift
+        and the external reference frequency can be set. An optional
+        fast CW identification can be inserted after each transmission
+        cycle, so that anyone can decode who is sending the tones,
+        without the need of waterfall display capabilities. </font></p>
+    <tb></tb>
+    <table cellspacing="2" cellpadding="2" align="center" width="100%"
+      border="0">
+      <tbody>
+        <tr>
+          <td valign="top" align="center" width="50%"><font
+              face="Helvetica, Arial, sans-serif"><img
+                src="Images/VE2ZAZ_Si5351C_Board.JPG" alt="" width="444"
+                border="1" height="250"><br>
+            </font>
+            <p><font face="Helvetica, Arial, sans-serif"> VE2ZAZ's
+                Si5351A/C Synthesizer board (populated with Arduino Nano
+                and Si5351C)</font></p>
+            <p> </p>
+          </td>
+          <td valign="top" align="center"><font face="Helvetica, Arial,
+              sans-serif"><img src="Images/Si5351A_board.jpg" alt=""
+                width="250" border="1" height="250"><br>
+            </font>
+            <p> <font face="Helvetica, Arial, sans-serif">Chinese-made
+                Si5351A board</font></p>
+          </td>
+        </tr>
+        <tr align="center">
+          <td colspan="1" valign="top"><a
+              href="Images/VE2ZAZ_Si5351_Synth_v1.1.png"><img
+                src="Images/VE2ZAZ_Si5351_Synth_v1.1.png" alt=""
+                width="362" border="0" height="250"></a><br>
+            <font face="Helvetica, Arial, sans-serif">VE2ZAZ's Si5351A/C
+              Synthesizer board Circuit Schematic<br>
+              (click on image to enlarge)<br>
+            </font></td>
+          <td valign="top"><font face="Helvetica, Arial, sans-serif"><img
+                src="Images/QRSS_ASK.jpg" alt="" width="477" border="1"
+                height="83"><br>
+            </font><font face="Helvetica, Arial, sans-serif"><img
+                src="Images/QRSS_FSK.jpg" alt="" width="477" border="1"
+                height="83"><br>
+            </font><font face="Helvetica, Arial, sans-serif"><img
+                src="Images/QRSS_MFSK.jpg" alt="" width="477" border="1"
+                height="83"><br>
+            </font><font face="Helvetica, Arial, sans-serif">The
+              available QRSS Transmit modes seen on an horizontal
+              waterfall display, <br>
+              from top to bottom: ASK-CW, FSK-CW and MFSK-Text</font><br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    <font face="Helvetica, Arial, sans-serif"><u><b>IMPORTANT NOTES:</b></u>
+      <br>
+    </font>
+    <ul>
+      <li>
+        <p><font face="Helvetica, Arial, sans-serif">The Si5351's output
+            pulse shape is square. This produces significant spurious
+            odd-harmonics, the 3rd harmonic being only 10dB down from
+            the fundamental. A low pass or band-pass filter is <font
+              color="#660000">MANDATORY</font> between the Si5351 and
+            the Antenna, otherwise regulations may not be met.&nbsp; For
+            example, assuming a transmit frequency of 7 or 10 MHz, a 7th
+            order LC low-pass filter with a cutoff frequency of 15 MHz
+            should be suitable. This can be hand-made using a few pieces
+            of wire and capacitors...and online filter calculators are
+            readily available.</font></p>
+      </li>
+      <li>
+        <p><font face="Helvetica, Arial, sans-serif"><font
+              face="Helvetica, Arial, sans-serif">In order to remain
+              legal, at the very least, the transmitted message should
+              contain the amateur radio call sign, but the text mode
+              could instead display a website or email address
+              containing the call sign.</font></font></p>
+      </li>
+    </ul>
+    <font face="Helvetica, Arial, sans-serif"><font face="Helvetica,
+        Arial, sans-serif"><br>
+      </font></font><br>
+    <font face="Helvetica, Arial, sans-serif"> </font> <font
+      face="Helvetica, Arial, sans-serif"> </font>
+    <h2 class="western"><font face="Helvetica, Arial, sans-serif">Prerequisites
+
+
+
+
+
+        and Installation<br>
+      </font></h2>
+    <font face="Helvetica, Arial, sans-serif"> </font>
+    <ul>
+      <li>
+        <p><font face="Helvetica, Arial, sans-serif">This software is
+            non-invasive:</font></p>
+      </li>
+      <ul>
+        <li>
+          <p><font face="Helvetica, Arial, sans-serif">No installation
+              program is required to run this software. Simply
+              double-click on the "QRSS_Xmitter_Configurator" executable
+              file to launch the program. <br>
+            </font></p>
+        </li>
+        <li>
+          <p><font face="Helvetica, Arial, sans-serif">Everything
+              happens in the local directory and sub-directories where
+              the executable is located. <br>
+            </font></p>
+        </li>
+        <li>
+          <p><font face="Helvetica, Arial, sans-serif">No Windows
+              registry writes are deliberately performed by the
+              software.No Windows environment variables are modified or
+              added.<br>
+            </font></p>
+        </li>
+      </ul>
+      <li>
+        <p><font face="Helvetica, Arial, sans-serif">This software uses
+            the LazSerial 3rd-party Lazarus component. In the situation
+            where this software must be re-compiled, the LazSerial
+            component must be installed in Lazarus IDE prior to
+            compiling the software. See the "Recompiling" section below
+            for more detail on the compilation process.</font></p>
+      </li>
+    </ul>
+    <h3><font face="Helvetica, Arial, sans-serif">Arduino</font></h3>
+    <ul>
+      <li>
+        <p style="margin-bottom: 0in; line-height: 100%"><font
+            face="Helvetica, Arial, sans-serif">The accompanying Arduino
+            software (sketch) must be used in conjunction with this
+            software, otherwise the latter will not function. </font> </p>
+        <p> </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0in; line-height: 100%"><font
+            face="Helvetica, Arial, sans-serif">The Arduino sketch uses
+            Jason Mildrum's Etherkit Si5351Arduino library (<a
+              href="https://github.com/etherkit/Si5351Arduino">https://github.com/etherkit/Si5351Arduino</a>).
+
+
+
+
+
+            To recompile/install the Arduino sketch, that library must
+            first be installed in the Arduino IDE via the Library
+            Manager (Menu: Sketch -&gt; Include Library -&gt; Manage
+            Libraries...).</font></p>
+      </li>
+    </ul>
+    <font face="Helvetica, Arial, sans-serif"> </font>
+    <h3 class="western"><font face="Helvetica, Arial, sans-serif">Windows</font></h3>
+    <font face="Helvetica, Arial, sans-serif"> </font>
+    <ul>
+      <li>
+        <p style="margin-bottom: 0in; line-height: 100%"><font
+            face="Helvetica, Arial, sans-serif">The proper Arduino
+            USB-Serial virtual port driver must be installed prior to
+            using this software. This is normally the case with Windows
+            versions prior to Windows 10. Note that this driver is
+            typically installed during the Arduino IDE installation.</font></p>
+        <p> </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0in; line-height: 100%"><font
+            face="Helvetica, Arial, sans-serif">This project is supplied
+            with an executable (.exe) that was compiled in Windows 7
+            32-bits. The supplied executable has been verified to work
+            correctly in Windows 7 32-bits and in Windows 10
+            64-bits.Thus it is expected to run properly in the Windows
+            7, 8 and 10&nbsp; (both 32 and 64-bit) operating systems.
+            Providing a 32-bit executable will be possible for as long
+            as the 32-bit version of Lazarus is available. Note that
+            re-compiling is always possible. General instructions on how
+            to compile the software are provided below.</font> </p>
+        <p> </p>
+      </li>
+    </ul>
+    <h3 class="western"><font face="Helvetica, Arial, sans-serif">Linux</font></h3>
+    <font face="Helvetica, Arial, sans-serif"> </font>
+    <ul>
+      <li>
+        <p style="margin-bottom: 0in; line-height: 100%"><font
+            face="Helvetica, Arial, sans-serif">This project is supplied
+            with an executable that was compiled in Linux Xubuntu 18.04
+            LTS 64-bits. The Linux executable may not run in other Linux
+            distros due to some library dependencies. Re-compiling may
+            be required. General instructions on how to compile the
+            software are provided below. <br>
+          </font></p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0in; line-height: 100%"><font
+            face="Helvetica, Arial, sans-serif">The Arduino USB-Serial
+            virtual port driver is typically included with most Linux
+            distributions. The Arduino Nano virtual port should
+            automatically be detected.</font></p>
+      </li>
+    </ul>
+    <h3><font face="Helvetica, Arial, sans-serif">Mac OS</font></h3>
+    <ul>
+      <li>
+        <p><font face="Helvetica, Arial, sans-serif">Although it has not
+            been tested, the software should also run properly on the
+            Mac OS once compiled in that OS. Similar serial port
+            considerations also apply.<br>
+          </font></p>
+      </li>
+    </ul>
+    <h3><font face="Helvetica, Arial, sans-serif">Recompiling</font></h3>
+    <p><font face="Helvetica, Arial, sans-serif">When needed, the
+        program can be easily recompiled in the Lazarus IDE environment,
+        which is available free of charge.<br>
+      </font></p>
+    <p> </p>
+    <p> </p>
+    <ol>
+      <li>
+        <p><font face="Helvetica, Arial, sans-serif">Decompress and save
+            this project (the entire directory and its content) on your
+            local drive.<br>
+          </font></p>
+      </li>
+      <li>
+        <p><font face="Helvetica, Arial, sans-serif">Download and
+            install the Lazarus IDE package (select the version based on
+            the current operating system) from the Lazarus website: <a
+              href="https://www.lazarus-ide.org/">https://www.lazarus-ide.org/</a></font></p>
+      </li>
+      <li>
+        <p><font face="Helvetica, Arial, sans-serif">In Lazarus IDE,
+            install the Lazserial component using the Online Package
+            Manager (Menu: Package -&gt; Online Package Manager). Check
+            mark "LazSerial" and click on the "Install" button.<br>
+          </font></p>
+      </li>
+      <li>
+        <p><font face="Helvetica, Arial, sans-serif">In Lazarus IDE,
+            open the "QRSS_Xmitter_Configurator.lpi" project file (Menu:
+            Project -&gt; Open Project...)</font></p>
+      </li>
+      <li>
+        <p><font face="Helvetica, Arial, sans-serif">In Lazarus IDE,
+            build the project (Menu: Run -&gt; Build or Run).</font></p>
+      </li>
+    </ol>
+    <font face="Helvetica, Arial, sans-serif"><br>
+    </font>
+    <p> </p>
+    <h2 class="western"><font face="Helvetica, Arial, sans-serif">Operation</font></h2>
+    <h3><font face="Helvetica, Arial, sans-serif">General<br>
+      </font></h3>
+    <font face="Helvetica, Arial, sans-serif"> </font>
+    <ul>
+      <li>
+        <p><font face="Helvetica, Arial, sans-serif">Launching the
+            software is done by simply double-clicking on the
+            "QRSS_Xmitter_Configurator" executable file (in Windows,
+            "QRSS_Xmitter_Configurator.exe"). In linux, if the program
+            does not launch, verify that the "executable" file flag is
+            set.<br>
+          </font></p>
+      </li>
+      <li>
+        <p><font face="Helvetica, Arial, sans-serif">Hints pop-up when
+            the mouse cursor hovers over an entry field. This provides
+            instantaneous info on the function of each field.&nbsp; </font></p>
+      </li>
+      <li>
+        <p><font face="Helvetica, Arial, sans-serif">The software saves
+            the various field values and the window position in a text
+            file named "saved_settings.cfg" in the same directory as the
+            executable file. This is performed at program exit.
+            Reloading of the field values is done at program launch by
+            reading the file. The absence of that file in the directory
+            will force the program to revert to default values at
+            program launch. </font></p>
+      </li>
+      <li>
+        <p> <font face="Helvetica, Arial, sans-serif">This software
+            uses Output-0 (the first Si5351 output) as the transmitting
+            port. Other ports are left non-configured.</font> </p>
+      </li>
+      <li>
+        <p style="margin-bottom: 0in; line-height: 100%"><font
+            face="Helvetica, Arial, sans-serif">All frequencies must be
+            entered in Hertz, for example 24.123456 MHz is entered as
+            "24123456". A frequency may be entered with up to 2
+            decimals, for example 10 MHz can be entered as
+            "10000000.00".</font></p>
+      </li>
+    </ul>
+    <h3><font face="Helvetica, Arial, sans-serif">Field Description</font></h3>
+    <h4><font face="Helvetica, Arial, sans-serif">&nbsp;&nbsp;&nbsp;
+        Frequency Configuration Zone</font></h4>
+    <ul>
+      <li>
+        <p><font face="Helvetica, Arial, sans-serif"><b>Tx Carrier
+              Frequency:</b> Carrier frequency of the transmitted
+            signal, expressed in Hertz.&nbsp;</font></p>
+      </li>
+      <ul>
+        <li>
+          <p><font face="Helvetica, Arial, sans-serif">In ASK-CW mode,
+              this is the frequency of the CW signal.</font></p>
+        </li>
+        <li>
+          <p><font face="Helvetica, Arial, sans-serif">In FSK-CW mode,
+              this is the frequency of the dits and dahs tone of the CW
+              signal. The frequency of the alternate tone (when no dits
+              or dahs are being sent) is lower by the Frequency Shift
+              value.</font></p>
+        </li>
+        <li>
+          <p><font face="Helvetica, Arial, sans-serif">In MFSK Text
+              mode, this frequency corresponds to tone of the lowest row
+              of pixels forming the characters.</font></p>
+        </li>
+      </ul>
+    </ul>
+    <ul>
+      <li>
+        <p><font face="Helvetica, Arial, sans-serif"><b>QRSS Mode:</b>&nbsp;
+
+
+
+
+
+            Selects which type of QRSS signal the system will produce.</font></p>
+      </li>
+      <ul>
+        <li>
+          <p><font face="Helvetica, Arial, sans-serif">ASK-CW: Regular
+              on-off CW (dits and dahs) carrier.<br>
+            </font></p>
+        </li>
+        <li>
+          <p><font face="Helvetica, Arial, sans-serif">FSK-CW: Frequency
+              Shifting CW carrier. Instead of an on-off carrier, a
+              frequency shift is generated when no dits or dahs are
+              being sent.<br>
+            </font></p>
+        </li>
+        <li>
+          <p><font face="Helvetica, Arial, sans-serif">MFSK Text: The
+              transmitted message is made of a string of characters,
+              each made of an array of 8 x 5 pixels, readable on an
+              horizontal waterfall display. The eight "horizontal" rows
+              of pixels are generated by frequency-shifting the carrier
+              by the Frequency Shift value. The five "vertical" columns
+              of pixels are sequentially sent in time, with a spacing
+              set by the QRSS Text Pixel Duration value.<br>
+            </font></p>
+        </li>
+      </ul>
+    </ul>
+    <ul>
+      <li>
+        <p><font face="Helvetica, Arial, sans-serif"><b>Frequency Shift
+              (Hz):</b>&nbsp; Frequency change produced to modulate the
+            QRSS signal in the FSK-CW and MFSK-Text modes.</font></p>
+      </li>
+      <ul>
+        <li><font face="Helvetica, Arial, sans-serif">In FSK-CW mode,
+            this sets the downward frequency shift (from the Tx carrier
+            frequency) that is generated when no dits or dahs are being
+            sent. A suggested value is 5 Hertz.</font></li>
+        <li><font face="Helvetica, Arial, sans-serif">In MFSK-Text mode,
+            this sets the upward frequency shift (from the Tx carrier
+            frequency) that is generated to produce each of the eight
+            "horizontal" rows of pixels. A suggested value is 3 Hertz.<br>
+          </font></li>
+      </ul>
+      <li>
+        <p><font face="Helvetica, Arial, sans-serif"><b>Output_Power:</b>&nbsp;
+
+
+
+
+
+            This allows to select which output drive current (2, 4, 6 or
+            8 mA) that the Si5351 uses on its RF output. This
+            corresponds to the proposed <u>approximate</u> output
+            powers of 2, 5, 10 and 12 milliWatts, as measured by the
+            author at 10 MHz on a 50-Ohm terminated power meter.<br>
+          </font></p>
+      </li>
+      <li>
+        <p><font face="Helvetica, Arial, sans-serif"><b>Reference
+              Selection:</b>&nbsp; Selects the reference signal that
+            cadences the entire Si5351 clock generation.<br>
+          </font></p>
+      </li>
+      <ul>
+        <li>
+          <p><font face="Helvetica, Arial, sans-serif">On-board Crystal:
+              This selects the on-board free-running crystal (either 25
+              or 27 MHz, depending on the crystal connected to the
+              Si5351) as the reference. This selection can be made for
+              both the Si5351<b>A</b> and Si5351<b>C</b> synthesizer
+              chips.<br>
+            </font></p>
+        </li>
+        <li>
+          <p><font face="Helvetica, Arial, sans-serif">External Input:
+              This selects the external input as the reference, which
+              can accept a frequency range of 10 MHz to 40 MHz.
+              Typically, a 10 MHz reference signal is used. Only usable
+              with an Si5351<b>C</b> synthesizer chip. </font> </p>
+        </li>
+      </ul>
+      <li>
+        <p><font face="Helvetica, Arial, sans-serif"><b>Reference
+              Frequency:</b>&nbsp; This <u>must contain</u> the
+            reference frequency, whether the 25 or 27 MHz on-board
+            crystal or the external reference input is used. Entering a
+            wrong reference frequency will produce a wrong output
+            frequency. It must be expressed in Hertz, for example
+            "25000000".<br>
+          </font></p>
+      </li>
+      <li>
+        <p><font face="Helvetica, Arial, sans-serif"><b>Frequency
+              Offset:</b>&nbsp; Provides the ability to correct for
+            inaccuracies in the reference frequency by entering the
+            offset from nominal in Parts-Per-Million. A positive value
+            will correct a reference frequency that sits too high. A
+            negative value will correct a reference frequency that sits
+            too low. Obviously if the exact reference frequency is
+            known, it can also be entered in the Reference Frequency
+            field; this will have the same effect as entering an offset
+            in PPM. This field accepts a number with up to two decimals.</font>
+        </p>
+      </li>
+    </ul>
+    <h4><font face="Helvetica, Arial, sans-serif">&nbsp;&nbsp;&nbsp;
+        Message Configuration Zone<br>
+      </font></h4>
+    <ul>
+      <li>
+        <p><font face="Helvetica, Arial, sans-serif"><b>QRSS / CW ID
+              Call Sign:</b>&nbsp; This is the call sign that is sent in
+            the QRSS CW modes. The optional Fast CW Identification also
+            uses this call sign. Only letters, digits, the '/' slash and
+            the space characters are accepted. Lowercase characters get
+            converted to uppercase before transmission.<br>
+          </font></p>
+      </li>
+      <li>
+        <p><font face="Helvetica, Arial, sans-serif"><b>QRSS CW Dit
+              Duration:</b>&nbsp; Sets the duration of the "dit" (Morse
+            code dot) during QRSS CW transmissions. The "dah" (Morse
+            code dash) will be three times that duration, and spaces
+            will use the same proportion. Entered in milliseconds. A
+            suggested value is 5000 milliseconds.<br>
+          </font></p>
+      </li>
+      <li>
+        <p><font face="Helvetica, Arial, sans-serif"><b>QRSS Text:</b>&nbsp;
+
+
+
+
+
+            This is the text message that is sent in the MFSK-Text mode.
+            A call sign, email address or web site address can be used.
+            To remain legal, it is strongly suggested that the string
+            includes the call sign. Most letters, digits and other ASCII
+            symbols are accepted. The maximum message length is 30
+            characters, including spaces. Lowercase characters get
+            converted to uppercase before transmission. <br>
+          </font></p>
+      </li>
+      <li>
+        <p><font face="Helvetica, Arial, sans-serif"><b>QRSS Text Pixel
+              Duration:</b>&nbsp; Sets the duration of each character
+            "pixel" sent during MFSK-Text transmissions. Entered in
+            milliseconds. A suggested value is 1000 ms.<br>
+          </font></p>
+      </li>
+      <li>
+        <p><font face="Helvetica, Arial, sans-serif"><b>Insert Fast CW
+              ID:</b>&nbsp; This enables the optional Fast (normal
+            speed) CW Identification. This feature allows others to
+            identify who is sending the signal, without the need for any
+            computer to decode QRSS. When checked, the QRSS / CW ID Call
+            Sign is inserted at the end of each QRSS transmission cycle.
+            <br>
+          </font></p>
+      </li>
+      <li>
+        <p><font face="Helvetica, Arial, sans-serif"><b>Fast CW Dit
+              Duration (ms):</b>&nbsp; Sets the duration of the "dit"
+            (Morse code dot) during Fast CW ID transmissions. Entered in
+            milliseconds. A typical value range is between 50 and 100
+            milliseconds.<br>
+          </font></p>
+      </li>
+      <li>
+        <p><font face="Helvetica, Arial, sans-serif"><b>Serial Port
+              Field:</b>&nbsp; This sets which serial port will be used
+            by the software to communicate with the Arduino.</font></p>
+      </li>
+      <ul>
+        <li>
+          <p><font face="Helvetica, Arial, sans-serif">In Windows, the
+              syntax used in the Serial Port field is "COMx", for
+              example "COM6". The user shall find out which COM port is
+              associated with the USB-serial adapter on the Arduino
+              board by consulting the Windows Device Manager or the
+              Arduino IDE (Menu: Tools -&gt; Port).</font></p>
+        </li>
+        <li>
+          <p><font face="Helvetica, Arial, sans-serif">In Linux, the
+              syntax used in the Serial Port field is "/dev/ttyUSBx",
+              for example "/dev/ttyUSB0". The user shall find out which
+              serial port is associated with the USB-serial adapter on
+              the Arduino board by consulting the "/dev" device
+              directory, or the Arduino IDE (Menu: Tools -&gt; Port).</font></p>
+        </li>
+      </ul>
+      <li>
+        <p><font face="Helvetica, Arial, sans-serif"><b>Transfer Button:</b>&nbsp;
+
+
+
+
+
+            This initiates a configuration transfer to the Arduino. The
+            user shall monitor the Status Message Field to receive
+            progress reports of the configuration transfer.<br>
+          </font></p>
+      </li>
+      <li>
+        <p><font face="Helvetica, Arial, sans-serif"><b>Help... Button:</b>&nbsp;
+
+
+
+
+
+            Opens this page in the default web browser.<br>
+          </font></p>
+      </li>
+      <li>
+        <p><font face="Helvetica, Arial, sans-serif"><b>Quit Button:</b>&nbsp;
+
+
+
+
+
+            Terminates this program gracefully. Before the window
+            closes, the configuration data contained in the various
+            window fields is saved to the local drive.<br>
+          </font></p>
+      </li>
+      <li>
+        <p><font face="Helvetica, Arial, sans-serif"><b>Status Message
+              Field:</b>&nbsp; This read-only box displays progress
+            messages during the configuration transfer process. It also
+            displays program errors.<br>
+            <br>
+          </font></p>
+      </li>
+    </ul>
+    <h2 class="western"><font face="Helvetica, Arial, sans-serif">Legal
+        Notice</font></h2>
+    <font face="Helvetica, Arial, sans-serif"> </font>
+    <p style="margin-bottom: 0in; line-height: 100%"><font
+        face="Helvetica, Arial, sans-serif">This software is “Free
+        software” (as defined by the Free Software Foundation), which
+        means it respects users' freedom and community. The users have
+        the freedom to run, copy, distribute, study, change and improve
+        this software. When modifying the software, a mention of the
+        original author, namely Bert-VE2ZAZ, would be a gracious
+        consideration.<br>
+      </font></p>
+    <font face="Helvetica, Arial, sans-serif"> </font>
+    <h2 class="western"><font face="Helvetica, Arial, sans-serif">Note </font></h2>
+    <font face="Helvetica, Arial, sans-serif"> </font>
+    <p style="margin-bottom: 0in; line-height: 100%"><font
+        face="Helvetica, Arial, sans-serif">This text is extracted from
+        the "Help.html" file (and the "Images" directory) provided with
+        this software.</font></p>
+    <font face="Helvetica, Arial, sans-serif"> </font>
+  </body>
+</html>
