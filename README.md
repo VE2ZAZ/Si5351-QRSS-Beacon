@@ -1,6 +1,6 @@
 # Si5351-QRSS-Beacon Software
 
-Please see the [Help.html]( http://htmlpreview.github.com/?https://github.com/VE2ZAZ/Si5351-QRSS-Beacon/blob/Repository-prep-work/Help.html) file for all the details.
+Please see the [Help.html]( http://htmlpreview.github.com/?https://github.com/VE2ZAZ/Si5351-QRSS-Beacon/blob/master/Help.html) file for all the details.
 
 This software allows to configure Silicon Laboratories Si5351A/C Synthesizer chips for QRSS beacon transmission, when supervised by an Arduino Uno or Nano board. After the Arduino has received a configuration from the software, it will re-load the Si5351 chip with that same configuration at every power up or reset. The Arduino (properly configured by this software) is required, as the Si5351 chip does not retain its configuration when power is removed; it must be re-configured at power up.
 
