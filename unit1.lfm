@@ -1,0 +1,480 @@
+object Form1: TForm1
+  Left = 151
+  Height = 573
+  Top = 245
+  Width = 586
+  HorzScrollBar.Visible = False
+  VertScrollBar.Visible = False
+  BorderStyle = bsSingle
+  BorderWidth = 2
+  Caption = 'Si5351 QRSS Transmitter Configurator'
+  ClientHeight = 573
+  ClientWidth = 586
+  DesignTimePPI = 87
+  OnCreate = Form1_Created
+  OnDestroy = Form1_Destroy
+  ShowHint = True
+  LCLVersion = '2.0.0.4'
+  Visible = True
+  object Freq_panel: TPanel
+    Left = 12
+    Height = 236
+    Hint = 'QRSS Transmitter Frequency in Hertz. This is the frequency at which the dits and dahs of the CW are produced'#10'Consult the proper QRSS websites to learn what frequencies in the band plan to use for QRSS mode.'
+    Top = 51
+    Width = 560
+    BevelInner = bvLowered
+    BevelOuter = bvLowered
+    ClientHeight = 236
+    ClientWidth = 560
+    Color = 144136
+    ParentColor = False
+    TabOrder = 0
+    object TxFreq_Label: TLabel
+      Left = 16
+      Height = 16
+      Top = 18
+      Width = 131
+      Caption = 'Tx Carrier Frequency  (Hz)'
+      Font.Color = clWhite
+      ParentColor = False
+      ParentFont = False
+    end
+    object Frequency_Offset: TLabel
+      Left = 392
+      Height = 16
+      Top = 160
+      Width = 122
+      Caption = 'Frequency Offset (PPM)'
+      Font.Color = clWhite
+      ParentColor = False
+      ParentFont = False
+    end
+    object Ref_Select: TRadioGroup
+      Left = 392
+      Height = 62
+      Hint = 'This selects the frequency reference source for the Si5351 chip:'#10'- OnBoard Crystal selects the onboard crystal (normally 25 or 27 MHz) as the reference,'#10'- External Input selects the external reference (typically 10 MHz) as the reference. This selection only applies to the Si5351C, which supports an external reference.'
+      Top = 18
+      Width = 141
+      AutoFill = True
+      Caption = 'Reference Selection'
+      ChildSizing.LeftRightSpacing = 6
+      ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+      ChildSizing.EnlargeVertical = crsHomogenousChildResize
+      ChildSizing.ShrinkHorizontal = crsScaleChilds
+      ChildSizing.ShrinkVertical = crsScaleChilds
+      ChildSizing.Layout = cclLeftToRightThenTopToBottom
+      ChildSizing.ControlsPerLine = 1
+      ClientHeight = 45
+      ClientWidth = 139
+      Font.Color = clWhite
+      ItemIndex = 0
+      Items.Strings = (
+        'On-board Crystal'
+        'External Input'
+      )
+      OnClick = QRSSTypeClick
+      ParentFont = False
+      TabOrder = 3
+    end
+    object Frequency_Offset1: TLabel
+      Left = 392
+      Height = 16
+      Top = 93
+      Width = 130
+      Caption = 'Reference Frequency (Hz)'
+      Font.Color = clWhite
+      ParentColor = False
+      ParentFont = False
+    end
+    object TX_Frequency: TFloatSpinEdit
+      Left = 16
+      Height = 33
+      Hint = 'Tx Carrier Frequency'
+      Top = 34
+      Width = 141
+      DecimalPlaces = 0
+      MaxValue = 225000000
+      MinValue = 0
+      TabOrder = 0
+      Value = 10140000
+    end
+    object Freq_Offset: TFloatSpinEdit
+      Left = 392
+      Height = 33
+      Hint = 'This allows to enter a frequencyt offset in parts-per-million to compensate for inaccuracies in the reference signal frequency.'
+      Top = 178
+      Width = 141
+      MaxValue = 1000
+      MinValue = -1000
+      TabOrder = 5
+      Value = 0
+    end
+    object Ref_Frequency: TFloatSpinEdit
+      Left = 392
+      Height = 33
+      Hint = 'This must contain the reference frequency, either:'#10'- Correspond to the onboard crystal frequency (normally 25 or 27 MHz) when the onbloard crystal is selected as the reference.'#10'- Correspond to the external reference frequency injected when the external Input is selected as the reference. Only applicable to the Si5351C.'
+      Top = 110
+      Width = 141
+      MaxValue = 40000000
+      MinValue = 3000000
+      TabOrder = 4
+      Value = 25000000
+    end
+    object Freq_Shift: TFloatSpinEdit
+      Left = 17
+      Height = 33
+      Hint = 'FSK CW frequency shift applied when no dits or dahs are sent. A typical value is 5 Hz.'
+      Top = 178
+      Width = 141
+      DecimalPlaces = 0
+      MaxValue = 1000
+      MinValue = 1
+      TabOrder = 2
+      Value = 5
+    end
+    object TxFreq_Label1: TLabel
+      Left = 16
+      Height = 16
+      Top = 161
+      Width = 103
+      Caption = 'Frequency Shift (Hz)'
+      Font.Color = clWhite
+      ParentColor = False
+      ParentFont = False
+    end
+    object QRSS_Type: TRadioGroup
+      Left = 16
+      Height = 72
+      Hint = 'This selects The type of QRSS modulation used:'#10'- ASK CW is the regular on-off modulation for morse code,'#10'- FSK CW shifts the frequency lower by the amount equal to the Frequency Shift field value when the CW is not sending a dit or dah.'#10'- MFSK Text sends text pixels by shifting the frequency at multiple points.'
+      Top = 80
+      Width = 141
+      AutoFill = True
+      Caption = 'QRSS Mode'
+      ChildSizing.LeftRightSpacing = 6
+      ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+      ChildSizing.EnlargeVertical = crsHomogenousChildResize
+      ChildSizing.ShrinkHorizontal = crsScaleChilds
+      ChildSizing.ShrinkVertical = crsScaleChilds
+      ChildSizing.Layout = cclLeftToRightThenTopToBottom
+      ChildSizing.ControlsPerLine = 1
+      ClientHeight = 55
+      ClientWidth = 139
+      Font.Color = clWhite
+      ItemIndex = 1
+      Items.Strings = (
+        'ASK-CW'
+        'FSK-CW'
+        'MFSK-Text'
+      )
+      OnClick = QRSSTypeClick
+      ParentFont = False
+      TabOrder = 1
+    end
+    object Shape1: TShape
+      Left = 184
+      Height = 190
+      Top = 32
+      Width = 2
+      Brush.Color = clMedGray
+      Pen.Color = clSilver
+    end
+    object Output_Power: TRadioGroup
+      Left = 226
+      Height = 91
+      Hint = 'This selects The type of QRSS modulation used:'#10'- ASK CW is the regular on-off modulation for morse code,'#10'- FSK CW shifts the frequency lower by the amount equal to the Frequency Shift field value when the CW is not sending a dit or dah.'#10'- MFSK Text sends text pixels by shifting the frequency at multiple points.'
+      Top = 72
+      Width = 100
+      AutoFill = True
+      Caption = 'Output Power'
+      ChildSizing.LeftRightSpacing = 6
+      ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+      ChildSizing.EnlargeVertical = crsHomogenousChildResize
+      ChildSizing.ShrinkHorizontal = crsScaleChilds
+      ChildSizing.ShrinkVertical = crsScaleChilds
+      ChildSizing.Layout = cclLeftToRightThenTopToBottom
+      ChildSizing.ControlsPerLine = 1
+      ClientHeight = 74
+      ClientWidth = 98
+      Font.Color = clWhite
+      ItemIndex = 3
+      Items.Strings = (
+        '2 mW'
+        '5 mW'
+        '10mW'
+        '12mW'
+      )
+      OnClick = QRSSTypeClick
+      ParentFont = False
+      TabOrder = 6
+    end
+    object Shape4: TShape
+      Left = 368
+      Height = 190
+      Top = 32
+      Width = 2
+      Brush.Color = clMedGray
+      Pen.Color = clSilver
+    end
+    object Label1: TLabel
+      Left = 203
+      Height = 16
+      Top = 6
+      Width = 135
+      Caption = 'Frequency Configuration'
+      Font.Color = clWhite
+      Font.Style = [fsBold]
+      ParentColor = False
+      ParentFont = False
+    end
+  end
+  object CWMsg_Panel: TPanel
+    Left = 12
+    Height = 168
+    Top = 291
+    Width = 560
+    BevelInner = bvLowered
+    BevelOuter = bvLowered
+    ClientHeight = 168
+    ClientWidth = 560
+    Color = 6619139
+    ParentColor = False
+    TabOrder = 1
+    object Insert_CWID: TCheckBox
+      Left = 392
+      Height = 23
+      Hint = 'Allows to insert a fast (normal) speed CW identification at the end of each QRSS callsign transmission cycle.'
+      Top = 50
+      Width = 115
+      Caption = 'Insert Fast CW ID'
+      Color = 6619139
+      Font.Color = clWhite
+      OnChange = Insert_CWIDChange
+      ParentColor = False
+      ParentFont = False
+      TabOrder = 4
+    end
+    object CALLSIGN: TEdit
+      Left = 16
+      Height = 33
+      Hint = 'Amateur radio callsign sent by the QRSS transmitter. '#10'Also sent in fast CW when the Fast CW ID is enabled.'
+      Top = 43
+      Width = 141
+      MaxLength = 30
+      TabOrder = 0
+      Text = 'NOCALL'
+    end
+    object TxCallsign_Label: TLabel
+      Left = 17
+      Height = 16
+      Top = 26
+      Width = 118
+      Caption = 'QRSS / CW ID Call Sign'
+      Font.Color = clWhite
+      ParentColor = False
+      ParentFont = False
+    end
+    object Dit_Duration_Label: TLabel
+      Left = 17
+      Height = 16
+      Top = 91
+      Width = 139
+      Caption = 'QRSS CW Dit Duration (ms)'
+      Font.Color = clWhite
+      ParentColor = False
+      ParentFont = False
+    end
+    object Dit_Duration_Label1: TLabel
+      Left = 393
+      Height = 16
+      Top = 76
+      Width = 132
+      Caption = 'Fast CW Dit Duration (ms)'
+      Font.Color = clWhite
+      ParentColor = False
+      ParentFont = False
+    end
+    object Dit_Duration: TFloatSpinEdit
+      Left = 16
+      Height = 33
+      Hint = 'QRSS (slow) speed morse code "dit" duration in milliseconds.'
+      Top = 108
+      Width = 141
+      DecimalPlaces = 0
+      Increment = 1000
+      MaxValue = 60000
+      MinValue = 1000
+      TabOrder = 1
+      Value = 1000
+    end
+    object Fast_Dit_Duration: TFloatSpinEdit
+      Left = 392
+      Height = 33
+      Hint = 'Fast speed CW morse code identification "dit" duration in milliseconds.'
+      Top = 92
+      Width = 141
+      DecimalPlaces = 0
+      MaxValue = 300
+      MinValue = 10
+      TabOrder = 5
+      Value = 70
+    end
+    object Shape2: TShape
+      Left = 368
+      Height = 124
+      Top = 27
+      Width = 2
+      Brush.Color = clMedGray
+      Pen.Color = clSilver
+    end
+    object Text_String: TEdit
+      Left = 204
+      Height = 33
+      Hint = 'Amateur radio callsign sent by the QRSS transmitter. '#10'Also sent in fast CW when the Fast CW ID is enabled.'
+      Top = 44
+      Width = 141
+      MaxLength = 30
+      TabOrder = 2
+      Text = 'NOCALL@NOMAIL.NO'
+    end
+    object Dit_Duration_Label2: TLabel
+      Left = 206
+      Height = 16
+      Top = 27
+      Width = 52
+      Caption = 'QRSS Text'
+      Font.Color = clWhite
+      ParentColor = False
+      ParentFont = False
+    end
+    object Pixel_Duration: TFloatSpinEdit
+      Left = 205
+      Height = 33
+      Hint = 'Fast speed CW morse code identification "dit" duration in milliseconds.'
+      Top = 108
+      Width = 141
+      DecimalPlaces = 0
+      MaxValue = 10000
+      MinValue = 100
+      TabOrder = 3
+      Value = 1000
+    end
+    object Dit_Duration_Label3: TLabel
+      Left = 206
+      Height = 16
+      Top = 91
+      Width = 153
+      Caption = 'QRSS Text Pixel Duration (ms)'
+      Font.Color = clWhite
+      ParentColor = False
+      ParentFont = False
+    end
+    object Shape3: TShape
+      Left = 184
+      Height = 124
+      Top = 27
+      Width = 2
+      Brush.Color = clMedGray
+      Pen.Color = clSilver
+    end
+    object Label2: TLabel
+      Left = 212
+      Height = 16
+      Top = 6
+      Width = 125
+      Caption = 'Message Configuration'
+      Font.Color = clWhite
+      Font.Style = [fsBold]
+      ParentColor = False
+      ParentFont = False
+    end
+  end
+  object SerialPort_Edit: TEdit
+    Left = 70
+    Height = 33
+    Hint = 'Captures the serial port connected to the Arduino Nano. '#10'Examples: '#10'Windows "COM4" '#10'Linux "dev/TTYUSB0"'
+    Top = 470
+    Width = 101
+    ParentFont = False
+    TabOrder = 2
+    Text = 'COMx'
+  end
+  object Transfer_Button: TButton
+    Left = 183
+    Height = 31
+    Hint = 'Transfer the current configuration data to the Arduino Nano'
+    Top = 470
+    Width = 68
+    Caption = 'Transfer'
+    OnClick = Transfer_ButtonClick
+    ParentFont = False
+    TabOrder = 3
+  end
+  object Quit_Button: TButton
+    Left = 453
+    Height = 31
+    Hint = 'Saves the current parameter values and terminates this program'
+    Top = 470
+    Width = 68
+    Caption = 'Quit'
+    OnClick = Form1_Destroy
+    ParentFont = False
+    TabOrder = 5
+  end
+  object Title_Label: TLabel
+    Left = 64
+    Height = 23
+    Top = 7
+    Width = 455
+    Caption = 'Si5351 QRSS Transmitter (Beacon) Configurator'
+    Font.Height = -19
+    Font.Name = 'Sans'
+    ParentColor = False
+    ParentFont = False
+  end
+  object Message_Memo: TMemo
+    Left = 0
+    Height = 56
+    Hint = 'This field is an output-only field that provides transfer progress status and various other progress messages to the user.'
+    Top = 515
+    Width = 590
+    Color = clSilver
+    ParentFont = False
+    ReadOnly = True
+    ScrollBars = ssVertical
+    TabOrder = 6
+  end
+  object About_Button: TButton
+    Left = 373
+    Height = 31
+    Hint = 'Opens the help file in the default web browser'
+    Top = 470
+    Width = 68
+    Caption = 'Help...'
+    OnClick = About_ButtonClick
+    ParentFont = False
+    TabOrder = 4
+  end
+  object SubTitle_Label: TLabel
+    Left = 196
+    Height = 15
+    Top = 27
+    Width = 204
+    Caption = 'By Bert, VE2ZAZ (ve2zaz@rac.ca)'
+    Font.Height = -12
+    Font.Name = 'Sans'
+    ParentColor = False
+    ParentFont = False
+  end
+  object LazSerial1: TLazSerial
+    Active = False
+    BaudRate = br__1200
+    DataBits = db8bits
+    Parity = pNone
+    FlowControl = fcNone
+    StopBits = sbOne
+    Device = '/dev/ttyUSB2'
+    RcvLineCRLF = False
+    left = 8
+    top = 8
+  end
+end

@@ -29,12 +29,15 @@
             (Beacon) Configuration Software</b></font></font></h1>
     <font face="Helvetica, Arial, sans-serif"> </font>
     <h1 align="center"><font style="font-size: 14pt" size="4"
-        face="Helvetica, Arial, sans-serif">Version 0.1, April 2019</font></h1>
+        face="Helvetica, Arial, sans-serif">Version 0.1, November 2019</font></h1>
     <font face="Helvetica, Arial, sans-serif"> </font>
     <p style="margin-top: 0.04in; margin-bottom: 0.08in; line-height:
       100%; page-break-after: avoid" align="center"><font
         style="font-size: 14pt" size="4" face="Helvetica, Arial,
-        sans-serif"> by Bert, VE2ZAZ (
+        sans-serif"> by Bert, VE2ZAZ (ve2zaz<font face="Helvetica,
+          Arial, sans-serif"> at</font> <font face="Helvetica, Arial,
+          sans-serif">rac<font face="Helvetica, Arial, sans-serif">.</font>ca</font>
+        <script type="text/javascript">var a = new Array('a','.c','h','zaz','ve2','@ya','oo');document.write("<a href='mailto:"+a[4]+a[3]+a[5]+a[2]+a[6]+a[1]+a[0]+"'>"+a[4]+a[3]+a[5]+a[2]+a[6]+a[1]+a[0]+"</a>");</script>
         )</font></p>
     <p> </p>
     <h2 class="western"><font face="Helvetica, Arial, sans-serif">Description</font></h2>
@@ -46,14 +49,26 @@
         configuration at every power up or reset. The Arduino (properly
         configured by this software) is required, as the Si5351 chip
         does not retain its configuration when power is removed; it must
-        be re-configured at power up.</font></p>
+        be re-configured at power up.<br>
+      </font><a href="Images/Linux_Software_Window.png"><font
+          face="Helvetica, Arial, sans-serif"><img alt=""
+            src="Images/Linux_Software_Window.png" vspace="10"
+            align="right" hspace="10" width="400" border="1"
+            height="407"></font></a><br>
+      <font face="Helvetica, Arial, sans-serif">This software was
+        written in FreePascal programming language within the Lazarus
+        IDE. Being a cross-platform compiler, the executable can be made
+        to run in any Linux, Windows or Mac OS environment when compiled
+        in that environment. See the "Prerequisites and Installation"
+        section below for more details specific to the operating system
+        you are running.</font></p>
     <p><font face="Helvetica, Arial, sans-serif">This software was
-        developed on the VE2ZAZ synthesizer board (below, left) hosting
-        an Arduino-nano and an Si5351C Clock Synthesizer chip. The board
+        developed on a VE2ZAZ synthesizer board (below, left) hosting an
+        Arduino-nano and an Si5351C Clock Synthesizer chip. The board
         can alternately be equipped with the Chinese-made Si5351A board
         (below, right). The main difference between the A and C versions
         of the Si5351 is that the C version can lock to an external
-        frequency reference between 10 and 40 Mhz (useable down to 5
+        frequency reference between 10 and 40 Mhz (usable down to 5
         MHz). All produced output frequencies are then PLL-locked to
         that reference. The A version relies solely on the accompanying
         on-board 25 or 27 MHz crystal for its reference. Another
@@ -61,11 +76,74 @@
         reference scaling/shaping circuit, which provides the proper
         amplitude to the Si5351C, regardless of the shape or amplitude
         of the input signal.</font></p>
+    <p><font face="Helvetica, Arial, sans-serif"><font face="Helvetica,
+          Arial, sans-serif">Note that this software is not designed to
+          run exclusively on the VE2ZAZ Synthesizer board. As a minimum,
+          one can build this beacon on a solderless prototype board
+          using an Arduino Nano, an off-the-shelf</font><font
+          face="Helvetica, Arial, sans-serif"><font face="Helvetica,
+            Arial, sans-serif"> Si5351A board, and the I2C line
+            conversion circuit, also available </font></font><font
+          face="Helvetica, Arial, sans-serif"><font face="Helvetica,
+            Arial, sans-serif"><font face="Helvetica, Arial, sans-serif">off-the-shelf</font>.
+            External +5V and +3.3V supplies are required.&nbsp;See the </font></font><font
+          face="Helvetica, Arial, sans-serif"><font face="Helvetica,
+            Arial, sans-serif"><font face="Helvetica, Arial, sans-serif">VE2ZAZ's
+
+
+              Si5351A/C Synthesizer board Circuit Schematic (above).<br>
+            </font></font></font></font></p>
+    <p><font face="Helvetica, Arial, sans-serif">The software offers
+        three QRSS transmit modes: </font></p>
     <p> </p>
-    <p style="margin-bottom: 0in; line-height: 100%"><font
-        face="Helvetica, Arial, sans-serif"><br>
-      </font> </p>
-    <font face="Helvetica, Arial, sans-serif"> </font>
+    <p> </p>
+    <p> </p>
+    <p> </p>
+    <p> </p>
+    <ol>
+      <li>
+        <p> </p>
+        <p><font face="Helvetica, Arial, sans-serif"><b>ASK-CW</b>,
+            which is more or less regular CW, but stretched in time.<br>
+          </font> </p>
+        <p> </p>
+      </li>
+    </ol>
+    <p> </p>
+    <p> </p>
+    <p> </p>
+    <ol>
+      <li>
+        <p> </p>
+        <p><font face="Helvetica, Arial, sans-serif"><b>FSK-CW</b>,
+            which is an always-on mode using frequency shifting to
+            differentate between dits/dahs and silences. <br>
+          </font> </p>
+        <p> </p>
+      </li>
+    </ol>
+    <p> </p>
+    <p> </p>
+    <p> </p>
+    <ol>
+      <li>
+        <p> </p>
+        <p><font face="Helvetica, Arial, sans-serif"><b>MFSK-Text</b>,
+            which uses multiple tone frequencies to encode a text
+            message's pixels.&nbsp;</font></p>
+        <p> </p>
+      </li>
+    </ol>
+    <p> </p>
+    <p> </p>
+    <p> </p>
+    <p> <font face="Helvetica, Arial, sans-serif">Among available
+        settings, the Morse code 'dit' duration, the FSK frequency shift
+        and the external reference frequency can be set. An optional
+        fast CW identification can be inserted after each transmission
+        cycle, so that anyone can decode who is sending the tones,
+        without the need of waterfall display capabilities. </font></p>
+    <tb></tb>
     <table cellspacing="2" cellpadding="2" align="center" width="100%"
       border="0">
       <tbody>
@@ -88,107 +166,67 @@
                 Si5351A board</font></p>
           </td>
         </tr>
+        <tr align="center">
+          <td colspan="1" valign="top"><a
+              href="Images/VE2ZAZ_Si5351_Synth_v1.1.png"><img
+                src="Images/VE2ZAZ_Si5351_Synth_v1.1.png" alt=""
+                width="362" border="0" height="250"></a><br>
+            <font face="Helvetica, Arial, sans-serif">VE2ZAZ's Si5351A/C
+              Synthesizer board Circuit Schematic<br>
+              (click on image to enlarge)<br>
+            </font></td>
+          <td valign="top"><font face="Helvetica, Arial, sans-serif"><img
+                src="Images/QRSS_ASK.jpg" alt="" width="477" border="1"
+                height="83"><br>
+            </font><font face="Helvetica, Arial, sans-serif"><img
+                src="Images/QRSS_FSK.jpg" alt="" width="477" border="1"
+                height="83"><br>
+            </font><font face="Helvetica, Arial, sans-serif"><img
+                src="Images/QRSS_MFSK.jpg" alt="" width="477" border="1"
+                height="83"><br>
+            </font><font face="Helvetica, Arial, sans-serif">The
+              available QRSS Transmit modes seen on an horizontal
+              waterfall display, <br>
+              from top to bottom: ASK-CW, FSK-CW and MFSK-Text</font><br>
+          </td>
+        </tr>
       </tbody>
     </table>
-    <p> <font face="Helvetica, Arial, sans-serif">The software offers
-        three QRSS transmit modes: </font></p>
-    <p> </p>
-    <p> </p>
-    <ol>
-      <li>
-        <p><font face="Helvetica, Arial, sans-serif"><b>ASK-CW</b>,
-            which is more or less regular CW, but stretched in time.<br>
-          </font> </p>
-      </li>
-    </ol>
-    <p> </p>
-    <ol>
-      <li>
-        <p><font face="Helvetica, Arial, sans-serif"><b>FSK-CW</b>,
-            which is an always-on mode using frequency shifting to
-            differientate between dits/dahs and silences. <br>
-          </font> </p>
-      </li>
-    </ol>
-    <p> </p>
-    <ol>
-      <li>
-        <p><font face="Helvetica, Arial, sans-serif"><b>MFSK-Text</b>,
-            which uses multiple tone frequencies to encode a text
-            message's pixels.&nbsp;</font></p>
-      </li>
-    </ol>
-    <p> </p>
-    <p> <font face="Helvetica, Arial, sans-serif">Among available
-        settings, the Morse code 'dit' duration, the FSK frequency shift
-        and the external reference frequency can be set. An optional
-        fast CW identification can be inserted after each transmission
-        cycle, so that anyone can decode who is sending the tones,
-        without the need of waterfall display capabilities. </font></p>
-    <p> </p>
-    <p><font face="Helvetica, Arial, sans-serif"> In order to remain
-        legal, at the very least, the transmitted message should contain
-        the amateur radio call sign, but the text mode could instead
-        display a website or email address containing the call sign.</font></p>
-    <font face="Helvetica, Arial, sans-serif"> <br>
+    <br>
+    <font face="Helvetica, Arial, sans-serif"><u><b>IMPORTANT NOTES:</b></u>
+      <br>
     </font>
-    <table cellspacing="2" cellpadding="2" align="center" width="50%"
-      border="0">
-      <tbody>
-        <tr align="center">
-          <td valign="top"><font face="Helvetica, Arial, sans-serif"><img
-                src="Images/QRSS_ASK.jpg" alt="" width="500" border="1"
-                height="87"><br>
-            </font> </td>
-        </tr>
-        <tr align="center">
-          <td valign="top"><font face="Helvetica, Arial, sans-serif"><img
-                src="Images/QRSS_FSK.jpg" alt="" width="500" border="1"
-                height="87"><br>
-            </font> </td>
-        </tr>
-        <tr align="center">
-          <td valign="top"><font face="Helvetica, Arial, sans-serif"><img
-                src="Images/QRSS_MFSK.jpg" alt="" width="500" border="1"
-                height="87"><br>
-            </font> </td>
-        </tr>
-      </tbody>
-    </table>
-    <font face="Helvetica, Arial, sans-serif"> </font>
-    <div align="center">
-      <p><font face="Helvetica, Arial, sans-serif">The available QRSS
-          Transmit modes seen on an horizontal waterfall display, <br>
-          from top to bottom: ASK-CW, FSK-CW and MFSK-Text.</font></p>
-      <p> </p>
-      <div align="left"><font face="Helvetica, Arial, sans-serif"><br>
-        </font>
-        <p> <font face="Helvetica, Arial, sans-serif"><u><b>IMPORTANT
-                NOTE:</b></u> The Si5351's output pulse shape is square.
-            This produces significant spurious odd-harmonics, the 3rd
-            harmonic being only 10dB down from the fundamental. A low
-            pass or band-pass filter is <font color="#660000">MANDATORY</font>
-            between the Si5351 and the Antenna, otherwise regulations
-            may not be met.&nbsp; For example, assuming a transmit
-            frequency of 7 or 10 MHz, a 7th order LC low-pass filter
-            with a cutoff frequency of 15 MHz should be suitable. This
-            can be hand-made using a few pieces of wire and
-            capacitors...and online filter calculators are readily
-            available.<br>
-          </font></p>
-        <p><font face="Helvetica, Arial, sans-serif">This software was
-            written in FreePascal programming language within the
-            Lazarus IDE. Being a cross-platform compiler, the executable
-            can be made to run in any Linux, Windows or Mac OS
-            environment when compiled in that environment. See the
-            "Prerequisites and Installation" section below for more
-            details specific to the operating system you are
-            running.&nbsp;</font> </p>
-        <font face="Helvetica, Arial, sans-serif"><br>
-        </font> </div>
-    </div>
-    <font face="Helvetica, Arial, sans-serif"> </font>
+    <ul>
+      <li>
+        <p><font face="Helvetica, Arial, sans-serif">The Si5351's output
+            pulse shape is square. This produces significant spurious
+            odd-harmonics, the 3rd harmonic being only 10dB down from
+            the fundamental. A low pass or band-pass filter is <font
+              color="#660000">MANDATORY</font> between the Si5351 and
+            the Antenna, otherwise regulations may not be met.&nbsp; For
+            example, assuming a transmit frequency of 7 or 10 MHz, a 7th
+            order LC low-pass filter with a cutoff frequency of 15 MHz
+            should be suitable. This can be hand-made using a few pieces
+            of wire and capacitors...and online filter calculators are
+            readily available.</font></p>
+      </li>
+      <li>
+        <p><font face="Helvetica, Arial, sans-serif"><font
+              face="Helvetica, Arial, sans-serif">In order to remain
+              legal, at the very least, the transmitted message should
+              contain the amateur radio call sign, but the text mode
+              could instead display a website or email address
+              containing the call sign.</font></font></p>
+      </li>
+    </ul>
+    <font face="Helvetica, Arial, sans-serif"><font face="Helvetica,
+        Arial, sans-serif"><br>
+      </font></font><br>
+    <font face="Helvetica, Arial, sans-serif"> </font> <font
+      face="Helvetica, Arial, sans-serif"> </font>
     <h2 class="western"><font face="Helvetica, Arial, sans-serif">Prerequisites
+
+
 
 
 
@@ -245,6 +283,8 @@
             face="Helvetica, Arial, sans-serif">The Arduino sketch uses
             Jason Mildrum's Etherkit Si5351Arduino library (<a
               href="https://github.com/etherkit/Si5351Arduino">https://github.com/etherkit/Si5351Arduino</a>).
+
+
 
 
 
@@ -430,6 +470,8 @@
 
 
 
+
+
             Selects which type of QRSS signal the system will produce.</font></p>
       </li>
       <ul>
@@ -451,7 +493,7 @@
               each made of an array of 8 x 5 pixels, readable on an
               horizontal waterfall display. The eight "horizontal" rows
               of pixels are generated by frequency-shifting the carrier
-              by the Frequency Shift value. The five "vertical" colums
+              by the Frequency Shift value. The five "vertical" columns
               of pixels are sequentially sent in time, with a spacing
               set by the QRSS Text Pixel Duration value.<br>
             </font></p>
@@ -477,6 +519,8 @@
       </ul>
       <li>
         <p><font face="Helvetica, Arial, sans-serif"><b>Output_Power:</b>&nbsp;
+
+
 
 
 
@@ -562,6 +606,8 @@
 
 
 
+
+
             This is the text message that is sent in the MFSK-Text mode.
             A call sign, email address or web site address can be used.
             To remain legal, it is strongly suggested that the string
@@ -624,6 +670,8 @@
 
 
 
+
+
             This initiates a configuration transfer to the Arduino. The
             user shall monitor the Status Message Field to receive
             progress reports of the configuration transfer.<br>
@@ -634,11 +682,15 @@
 
 
 
+
+
             Opens this page in the default web browser.<br>
           </font></p>
       </li>
       <li>
         <p><font face="Helvetica, Arial, sans-serif"><b>Quit Button:</b>&nbsp;
+
+
 
 
 
